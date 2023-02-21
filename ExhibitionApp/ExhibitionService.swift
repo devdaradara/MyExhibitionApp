@@ -31,7 +31,7 @@ class ExhibitionService: ObservableObject {
     // http를 사용하면 Info.plist 파일에 예외 도메인을 추가해야함
     // Exception Domains 키에 주소 추가, NSExceptionAllowsInsecureHTTPLoads YES로 값을 할당
     func getInformation() {
-        let url = URL(string: "http://openapi.seoul.go.kr:8088/\(apiKey)/json/culturalEventInfo/1/10")
+        let url = URL(string: "http://openapi.seoul.go.kr:8088/\(apiKey)/json/culturalEventInfo/1/100")
         guard let url = url else {
             return
         }

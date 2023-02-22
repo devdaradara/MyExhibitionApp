@@ -8,8 +8,23 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var exhibitionService = ExhibitionService()
-    @State var categoryType: String = ""
-    @State var titleName: String = ""
+    
+    enum Categories: String, CaseIterable, Identifiable {
+        case 전체 = "전체"
+        case 전시 = "전시/미술"
+        case 국악 = "국악"
+        case 뮤지컬 = "뮤지컬/오페라"
+        case 콘서트 = "콘서트"
+        case 문화교양 = "문화교양/강좌"
+        case 무용 = "무용"
+        case 영화 = "영화"
+        case 클래식 = "클래식"
+        case 독주 = "독주/독창회"
+        case 기타 = "기타"
+        
+        var id: Self { self }
+      }
+    @State var categoryType = Categories.전체
 
     var body: some View {
         VStack {
@@ -21,22 +36,28 @@ struct ContentView: View {
                             .fontWeight(.bold)
                             .padding()
                         
-                        Picker(selection: $categoryType, label: Text("Category")) {
-                            Text("전체").tag("")
-                            Text("전시").tag("전시")
-                            Text("국악").tag("국악")
-                            Text("뮤지컬").tag("뮤지컬")
-                            Text("콘서트").tag("콘서트")
-                            Text("기타").tag("기타")
+                        HStack {
+                            Text("Category")
+                                .padding([.leading], 40)
+                            
+                            Picker(selection: $categoryType, label: Text("Category")) {
+                                ForEach(Categories.allCases) { category in
+                                    Text(category.rawValue)
+                                        .tag(category)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 0, trailing: 10))
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .listRowInsets(EdgeInsets())
+                            
                         }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding(EdgeInsets(top: 20, leading: 10, bottom: 10, trailing: 10))
                         
                         List(exhibition.culturalEventInfo.row.filter({
-                            if categoryType == "" {
+                            if categoryType == Categories.전체 {
                                 return true
                             } else {
-                                return $0.codename.contains(categoryType)
+                                return $0.codename.contains(categoryType.rawValue)
                             }
                         }), id: \.title) { row in
                             NavigationLink(destination: DetailView(selectRow: row)) {
@@ -66,6 +87,7 @@ struct ContentView: View {
                         }
                     }
                 }
+
             }
         }
         .onAppear {

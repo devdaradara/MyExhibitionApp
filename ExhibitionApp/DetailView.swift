@@ -26,12 +26,12 @@ struct DetailView: View {
                     .frame(width: geo.size.width, height: geo.size.width * 1.33)
                     .cornerRadius(12)
                 }
-                .padding(EdgeInsets(top: 0, leading: 20, bottom: 530, trailing: 20))
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 450, trailing: 20))
                 
                 Text(selectRow.title)
                     .font(.title)
                     .fontWeight(.bold)
-                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                    .padding([.leading, .trailing], 10)
 
                 Text(selectRow.date)
                     .font(.headline)
@@ -82,7 +82,6 @@ struct InformationView: View {
             showMoreDetail(infoTitle: "기타 내용", information: selectRow.etcDesc)
             showMoreDetail(infoTitle: "홈페이지 주소", information: selectRow.orgLink)
             showMoreDetail(infoTitle: "신청일", information: selectRow.rgstdate)
-            showMoreDetail(infoTitle: "시민 기관", information: selectRow.ticket)
         }
         .padding([.top], 30)
     }

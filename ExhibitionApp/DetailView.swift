@@ -13,6 +13,7 @@ struct DetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
+                
                 Spacer()
                 
                 GeometryReader { geo in
@@ -44,14 +45,31 @@ struct DetailView: View {
             }
         }
         .navigationBarItems(
-            trailing: Button(action: {
-                selectRow.isFavorite.toggle()
-                UserDefaults.standard.set(selectRow.isFavorite, forKey: selectRow.codename)
-
-            }, label: {
-                Image(systemName: selectRow.isFavorite ? "heart.fill" : "heart")
-                    .foregroundColor(.red)
-            })
+            trailing: HStack {
+                
+                Spacer()
+                
+                Button(action: {
+                    if let encodedString = "https://www.google.com/maps/search/?api=1&query=\(selectRow.place)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                       let url = URL(string: encodedString) {
+                        UIApplication.shared.open(url)
+                    }
+                }, label: {
+                    Text("지도")
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                })
+                
+                Spacer()
+                
+                Button(action: {
+                    UIApplication.shared.open(URL(string: selectRow.orgLink)!)
+                }, label: {
+                    Text("홈페이지")
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                })
+            }
         )
     }
 }
@@ -90,7 +108,6 @@ struct InformationView: View {
             showMoreDetail(infoTitle: "출연자 정보", information: selectRow.player)
             showMoreDetail(infoTitle: "프로그램 소개", information: selectRow.program)
             showMoreDetail(infoTitle: "기타 내용", information: selectRow.etcDesc)
-            showMoreDetail(infoTitle: "홈페이지 주소", information: selectRow.orgLink)
             showMoreDetail(infoTitle: "신청일", information: selectRow.rgstdate)
         }
         .padding([.top], 30)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    var selectRow: Row
+    @State var selectRow: Row
     
     var body: some View {
         ScrollView {
@@ -43,6 +43,16 @@ struct DetailView: View {
                 
             }
         }
+        .navigationBarItems(
+            trailing: Button(action: {
+                selectRow.isFavorite.toggle()
+                UserDefaults.standard.set(selectRow.isFavorite, forKey: selectRow.codename)
+
+            }, label: {
+                Image(systemName: selectRow.isFavorite ? "heart.fill" : "heart")
+                    .foregroundColor(.red)
+            })
+        )
     }
 }
 

@@ -20,7 +20,7 @@ struct ExhibitionResponse: Codable {
 struct CulturalEventInfo: Codable {
     let listTotalCount: Int
     let codeResult: CodeResult
-    let row: [Row]
+    var row: [Row]
 
     enum CodingKeys: String, CodingKey {
         case listTotalCount = "list_total_count"
@@ -53,6 +53,8 @@ struct Row: Codable {
     let ticket: String
     let strtdate, endDate: String
     let themecode: String
+    
+    var isFavorite: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case codename = "CODENAME"

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     @State var selectRow: Row
+    @State var isFavorite: Bool = false
     
     var body: some View {
         ScrollView {
@@ -47,7 +48,18 @@ struct DetailView: View {
         .navigationBarItems(
             trailing: HStack {
                 
-                Spacer()
+                Button(action: {
+                    isFavorite.toggle()
+                    if isFavorite {
+                        FavoriteManager.shared.saveFavorite(row: selectRow)
+                    } else {
+                        FavoriteManager.shared.removeFavorite(row: selectRow)
+                    }
+                    print("Favorite changed: \(selectRow.isFavorite)")
+                }, label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .foregroundColor(.red)
+                })
                 
                 Button(action: {
                     if let encodedString = "https://www.google.com/maps/search/?api=1&query=\(selectRow.place)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
@@ -60,8 +72,6 @@ struct DetailView: View {
                         .foregroundColor(.blue)
                 })
                 
-                Spacer()
-                
                 Button(action: {
                     UIApplication.shared.open(URL(string: selectRow.orgLink)!)
                 }, label: {
@@ -71,6 +81,9 @@ struct DetailView: View {
                 })
             }
         )
+        .onAppear {
+            isFavorite = FavoriteManager.shared.isFavorite(row: selectRow)
+        }
     }
 }
 
@@ -111,12 +124,5 @@ struct InformationView: View {
             showMoreDetail(infoTitle: "신청일", information: selectRow.rgstdate)
         }
         .padding([.top], 30)
-    }
-}
-
-struct DetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        let row = Row(codename: "전시/미술", guname: "구로구", title: "특별기획전 ‘공장도시: 팩토리타임즈’", date: "2023-12-28~2023-03-12", place: "서울시 구로구 디지털로26길 38, G-Tower 3층", orgName: "", useTrgt: "", useFee: "", player: "", program: "", etcDesc: "", orgLink: "https://blog.naver.com/PostView.naver?blogId=museumg&logNo=222953328006&categoryNo=1&parentCategoryNo=1&from=thumbnailList", mainImg: "https://culture.seoul.go.kr/cmmn/file/getImage.do?atchFileId=6096c5f6d5d2475081b48bcf280dbfb4&thumb=Y", rgstdate: "2023-01-12", ticket: "기관", strtdate: "2023-12-28 00:00:00.0", endDate: "2023-03-12 00:00:00.0", themecode: "기타")
-        DetailView(selectRow: row)
     }
 }

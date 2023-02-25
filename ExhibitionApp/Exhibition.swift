@@ -77,3 +77,40 @@ struct Row: Codable {
         case themecode = "THEMECODE"
     }
 }
+
+class FavoriteManager {
+    static let shared = FavoriteManager()
+    let userDefaults = UserDefaults.standard
+    
+    func saveFavorite(row: Row) {
+        do {
+            let data = try JSONEncoder().encode(row)
+            userDefaults.set(data, forKey: row.title)
+        } catch {
+            print("Error saving favorite: \(error.localizedDescription)")
+        }
+    }
+    
+    func removeFavorite(row: Row) {
+        userDefaults.removeObject(forKey: row.title)
+    }
+    
+    func isFavorite(row: Row) -> Bool {
+        return userDefaults.object(forKey: row.title) != nil
+    }
+    
+    func loadFavorites() -> [Row] {
+        let favorites = userDefaults.dictionaryRepresentation().compactMap { entry -> Row? in
+            guard let data = entry.value as? Data else { return nil }
+            do {
+                let row = try JSONDecoder().decode(Row.self, from: data)
+                return row
+            } catch {
+                print("Error loading favorite: \(error.localizedDescription)")
+                return nil
+            }
+        }
+        
+        return favorites
+    }
+}

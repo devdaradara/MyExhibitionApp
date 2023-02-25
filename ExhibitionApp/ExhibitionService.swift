@@ -28,8 +28,8 @@ class ExhibitionService: ObservableObject {
 
     // App Transport Security has blocked a cleartext HTTP connection toopenapi.seoul.go.krsince it is insecure. Use HTTPS instead or add this domain to Exception Domains in your Info.plist.
     // 애플은 iOS 9 부터 앱이 기본적으로 https 를 사용하도록 요구
-    // http를 사용하면 Info.plist 파일에 예외 도메인을 추가해야함
-    // Exception Domains 키에 주소 추가, NSExceptionAllowsInsecureHTTPLoads YES로 값을 할당
+    // 1. http를 사용하면 Info.plist 파일에 예외 도메인을 추가해야함
+    // 2. Allow Arbitrary Loads를 YES로 값을 할당
     func getInformation() {
         let url = URL(string: "http://openapi.seoul.go.kr:8088/\(apiKey)/json/culturalEventInfo/1/100")
         guard let url = url else {
